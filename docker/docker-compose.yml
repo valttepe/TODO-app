@@ -1,0 +1,57 @@
+version: '3.9'
+services:
+  # Node.js TypeScript Backend
+  todo-backend:
+    container_name: TODO-backend
+    build:
+      context: ../TODO-backend/
+      dockerfile: Dockerfile-backend
+    ports:
+      - "127.0.0.1:1337:1337"
+    depends_on:
+      - mariadb
+    volumes:
+      - ../TODO-backend:/app
+    networks:
+      - frontend
+      - database-connection
+
+  todo-app:
+    container_name: TODO-app
+    build:
+      context: ../TODO-app/
+      dockerfile: Dockerfile-frontend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../TODO-app/src:/app/src
+      - ../TODO-app/index.html:/app/index.html
+    networks:
+      - frontend
+  # MariaDB
+  mariadb:
+    image: mariadb:10.5.8
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: todo_root
+      MYSQL_DATABASE: local_todo_app
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todo_password
+    ports:
+      - "127.0.0.1:3306:3306"
+    expose:
+      - 3306
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - database-connection
+networks:
+  frontend:
+    name: 'todo-app'
+  database-connection: 
+    name: 'database-connection'
+
+volumes:
+  mariadb_data:

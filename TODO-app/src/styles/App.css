@@ -1,0 +1,7 @@
+.main-content {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  border: 1px;
+  border-style: solid;
+}
