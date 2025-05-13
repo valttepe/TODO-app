@@ -14,21 +14,21 @@ function AddTodo({addTodoClick}: Props) {
   return (
     <Box component="section" sx={{ display: "flex", margin: '1,5em' }}>
       <TextField 
-        id="filled-basic"
+        id="add-title"
         label="Otsikko"
         variant="filled"
         onChange={(event) => setTitle(event?.target.value)}
         sx={{ marginRight: '1em'}}
       />
       <TextField
-          id="filled-multiline-static"
+          id="add-description"
           label="Sisältö"
           multiline
           variant="filled"
           onChange={(event) => setDescription(event?.target.value)}
           sx={{ marginRight: '1em'}}
       />
-      <Button variant="contained" onClick={() => addTodoClick(title, description)}>Lisää</Button>
+      <Button id="add-new" variant="contained" onClick={() => addTodoClick(title, description)}>Lisää</Button>
     </Box>
   )
 }

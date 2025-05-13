@@ -11,8 +11,9 @@ function TodoItem({ todoListItem, updateTodoClick, deleteTodoClick }: Props) {
   console.log('testing', todoListItem)
   const stateColor = todoListItem.progress_state ? 'lightgreen' : 'lightblue';
   return (
-    <ListItem sx={{display: 'flex', flexDirection: 'column', backgroundColor: stateColor, margin: '1em'}}>
+    <ListItem id="todo-list-item" sx={{display: 'flex', flexDirection: 'column', backgroundColor: stateColor, margin: '1em'}}>
       <ListItemText
+        id="todo-list-item-text"
         primary={todoListItem.title}
         secondary={todoListItem.description}
        />
