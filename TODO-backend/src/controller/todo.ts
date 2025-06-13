@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
-import { deleteTodo, getTodoListData, saveTodo, updateTodo } from "../database/todo";
+import todoDb from "../database/todo";
 
-export async function getTodoList(req: Request, res: Response) {
+async function getTodoList(req: Request, res: Response) {
   try {
-    const data = await getTodoListData();
+    const progressState = req.query.progressState == "1" ? true : false;
+    console.log('state', req.query.progressState);
+    const data = await todoDb.getTodoListData(progressState);
     console.log('testing');
     res.send(data);
 
@@ -13,12 +15,12 @@ export async function getTodoList(req: Request, res: Response) {
   }
 }
 
-export async function addTodoItem(req: Request, res: Response) {
+async function saveTodoItem(req: Request, res: Response) {
   try {
     console.log('BODY', req.body);
     const title: string = req.body.title;
     const description: string = req.body.description;
-    await saveTodo(title, description)
+    await todoDb.saveTodo(title, description)
     res.sendStatus(200);
 
   } catch (error) {
@@ -27,12 +29,12 @@ export async function addTodoItem(req: Request, res: Response) {
   }
 }
 
-export async function updateTodoItem(req: Request, res: Response) {
+async function updateTodoItem(req: Request, res: Response) {
   try {
     console.log('BODY', req.body);
     const id: number = req.body.id;
     const progressState: boolean = req.body.progressState;
-    await updateTodo(id, progressState)
+    await todoDb.updateTodo(id, progressState)
     res.sendStatus(200);
   } catch (error) {
     console.error(error);
@@ -40,14 +42,21 @@ export async function updateTodoItem(req: Request, res: Response) {
   }
 }
 
-export async function deleteTodoItem(req: Request, res: Response) {
+async function deleteTodoItem(req: Request, res: Response) {
   try {
     console.log('BODY', req.body);
     const id: number = req.body.id;
-    await deleteTodo(id);
+    await todoDb.deleteTodo(id);
     res.sendStatus(200);
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
   }
+}
+
+export default {
+  getTodoList,
+  saveTodoItem,
+  updateTodoItem,
+  deleteTodoItem
 }
